@@ -1,5 +1,6 @@
 #include <common/util.h>
 #include <stdint.h>
+#include <kernel/mmio.h>
 
 // raspi 1B doesnt have a div instruction
 uint32_t div(uint32_t dividend, uint32_t divisor)

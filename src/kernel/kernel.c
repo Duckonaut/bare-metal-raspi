@@ -1,8 +1,15 @@
+#include <common/io.h>
+#include <common/rand.h>
 #include <common/util.h>
 #include <kernel/graphics.h>
+#include <kernel/interrupts.h>
 #include <kernel/mmio.h>
+#include <kernel/timer.h>
 #include <stddef.h>
 #include <stdint.h>
+
+const uint32_t UART0_BASE = 0x20201000;
+const uint32_t UART0_IMSC = (UART0_BASE + 0x38);
 
 void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 {
@@ -10,16 +17,35 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 	(void)r1;
 	(void)atags;
 
-	while (graphics(1920, 1080));
+	while (graphics(320, 240))
+		;
 
-	char text[] = "\n\n\n\n\n\nMANKIND IS DEAD.\nBLOOD IS FUEL.\nHELL IS FULL.";
+	printf(INTERRUPTS_ENABLED() ? "YES\n" : "NO\n");
+
+	interrupts_init();
+	timer_init();
+	timer_set(3000);
+	printf(INTERRUPTS_ENABLED() ? "YES\n" : "NO\n");
+
+	// int32_t a = 0x7FFFFFF0;
+	// printf(itoa(a, 16));
+	// a += 0x10;
+
+	// printf(itoa(a, 16));
+
+
+	char text[] = "HELLO.\n";
 	pixel_t red = {0, 0, 255};
 	pixel_t black = {0, 0, 0};
 
-	for (uint32_t i = 0; i < sizeof(text); i++) {
-		gpu_putc(text[i], black, red);
+	gpu_puts(text, black, red);
 
-		delay(1000000);
+	for (uint32_t i = 0;; i = rand()) {
+		char* s = itoa(i, 16);
+
+		gpu_puts(s, black, red);
+
+		gpu_putc('\n', black, black);
 	}
 
 	uint32_t gpio_enable_output = 0x00040000;

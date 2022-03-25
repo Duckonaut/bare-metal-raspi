@@ -1,7 +1,7 @@
-#include <stdint.h>
+#ifndef KERNEL_GPU_MAIL_H
+#define KERNEL_GPU_MAIL_H
 
-#ifndef GPU_MAIL_H
-#define GPU_MAIL_H
+#include <stdint.h>
 
 typedef enum
 {

@@ -20,7 +20,7 @@
 .section .init
 .globl _start
 _start:
-
+	cpsid iaf
     ldr sp, =__end
 	mov r4, #0x8000
 	add sp, sp, r4
