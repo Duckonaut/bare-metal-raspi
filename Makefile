@@ -5,8 +5,9 @@ OBJCOPY = arm-none-eabi-objcopy
 # Set any constants based on the raspberry pi model.  Version 1 has some differences to 2 and 3
 
 CPU = arm1176jzf-s
+FPU = vfpv2
 
-CFLAGS= -mcpu=$(CPU) -fpic -ffreestanding
+CFLAGS= -mcpu=$(CPU) -mfpu=$(FPU) -mfloat-abi=hard -mgeneral-regs-only -fpic -ffreestanding
 CSRCFLAGS= -O2 -Wall -Wextra
 LFLAGS= -ffreestanding -O2 -nostdlib
 

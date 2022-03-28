@@ -21,6 +21,7 @@ void interrupts_init(void) {
 }
 
 void irq_handler(void) {
+	printf("IRQ HANDLER\n");
     int j; 
 	for (j = 0; j < NUM_IRQS; j++) {
         // If the interrupt is pending and there is a handler, run the handler

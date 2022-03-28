@@ -11,6 +11,29 @@
 const uint32_t UART0_BASE = 0x20201000;
 const uint32_t UART0_IMSC = (UART0_BASE + 0x38);
 
+uint32_t arm4_cpsrget()
+{
+    uint32_t r;
+    
+    asm("mrs %[ps], cpsr" : [ps]"=r" (r));
+    return r;
+}
+
+void arm4_cpsrset(uint32_t r)
+{
+    asm("msr cpsr, %[ps]" : : [ps]"r" (r));
+}
+
+uint32_t arm_fpscrget() {
+	uint32_t r;
+    asm("fmrx %[ps], fpscr" : [ps]"=r" (r));
+    return r;
+}
+
+void arm_fpscrset(uint32_t r) {
+    asm("fmxr fpscr, %[ps]" : : [ps]"r" (r));
+}
+
 void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 {
 	(void)r0;
@@ -20,32 +43,50 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 	while (graphics(320, 240))
 		;
 
-	printf(INTERRUPTS_ENABLED() ? "YES\n" : "NO\n");
+	//printf(itoa(arm4_cpsrget(), 2));
+	printf("\n");
+
+	printf(INTERRUPTS_ENABLED() ? "YES\n" : "NO\n");	
 
 	interrupts_init();
-	timer_init();
-	timer_set(3000);
+
+	printf(btoa(arm4_cpsrget()));
+	printf("\n");
+	//timer_init();
+	//timer_set(3000);
 	printf(INTERRUPTS_ENABLED() ? "YES\n" : "NO\n");
 
-	// int32_t a = 0x7FFFFFF0;
-	// printf(itoa(a, 16));
-	// a += 0x10;
+	arm4_cpsrset(arm4_cpsrget() | (1 << 9) | (1 << 8) | (1 << 7) | (1 << 6));
 
-	// printf(itoa(a, 16));
+	printf(btoa(arm4_cpsrget()));
+	printf("\n");
 
+	//do {
+	//	uint32_t dummy;
+	//	asm volatile("fmrx %[dummy],fpexc\n\t"
+    //                 "orr %[dummy],%[dummer],#0x40000000\n\t"
+	//				 "fmxr fpexc ,%[dummer]\n\t" : [dummy]"=r" (dummy) : [dummer]"r" (dummy));
+	//} while (0);
 
-	char text[] = "HELLO.\n";
-	pixel_t red = {0, 0, 255};
+	//printf(itoa(arm_fpscrget(), 2));
+	//printf("\n");
+
+	//arm_fpscrset(arm_fpscrget() & ~(1 << 10));
+
+	//printf(itoa(arm_fpscrget(), 2));
+	printf("\n\n");
+
 	pixel_t black = {0, 0, 0};
 
-	gpu_puts(text, black, red);
-
+	uint32_t x = 0;
 	for (uint32_t i = 0;; i = rand()) {
-		char* s = itoa(i, 16);
+		char c = 'A' + mod(i, 26);
 
-		gpu_puts(s, black, red);
+		x++;
 
-		gpu_putc('\n', black, black);
+		gpu_puts(&c, black, (pixel_t){ (x >> 16) & 0xFF, (x >> 8) & 0xFF, x & 0xFF });
+
+		gpu_setcursor(mod(rand(), char_display_info.max_x), mod(rand(), char_display_info.max_y));
 	}
 
 	uint32_t gpio_enable_output = 0x00040000;

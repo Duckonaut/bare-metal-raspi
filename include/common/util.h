@@ -5,9 +5,13 @@
 
 uint32_t div(uint32_t dividend, uint32_t divisor);
 
+uint32_t get_last_mod();
+
 uint32_t mod(uint32_t dividend, uint32_t divisor);
 
-char* itoa(int num, int base);
+char* itoa(uint32_t num, uint32_t base);
+
+char* btoa(uint32_t num);
 
 int atoi(char* num);
 

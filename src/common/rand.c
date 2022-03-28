@@ -1,21 +1,19 @@
-#include <stdint.h>
 #include <common/rand.h>
 #include <common/util.h>
+#include <stdint.h>
 
 const uint32_t RAND_MAX = 0xFFFF;
 const uint32_t RAND_MAX_HALF = 0x7FFF;
 
 static uint32_t next;
 
-
-uint32_t rand() { 
+uint32_t rand()
+{
 	next = next * 1103515245 + 12345;
-    return next; //(uint32_t)mod((div(next, RAND_MAX)), RAND_MAX_HALF);
-    //next = (uint32_t)(next * next * 0xEF00 + next * 1 + 73);
-    //return next;
+	return (uint32_t)mod(div(next, 65536), 32768);
 }
 
-void srand(uint32_t seed) {
+void srand(uint32_t seed)
+{
 	next = seed;
 }
-
