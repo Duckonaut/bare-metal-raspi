@@ -2,44 +2,53 @@
 #include <kernel/mmio.h>
 #include <stdint.h>
 
-uint32_t div(uint32_t a, uint32_t b) {
-  unsigned int c = 1, result = 0;
+uint32_t div(uint32_t a, uint32_t b)
+{
+	unsigned int c = 1, result = 0;
 
-  if (b == 0) return (uint32_t)-1 /*infinity*/;
+	if (b == 0)
+		return (uint32_t)-1 /*infinity*/;
 
-  while (((int32_t)b > 0) && (b < a)) { b = b<<1; c = c<<1; }
+	while (((int32_t)b > 0) && (b < a)) {
+		b = b << 1;
+		c = c << 1;
+	}
 
-  do {
-    if (a >= b) { a -= b; result += c; }
-    b = b>>1; c = c>>1;
-  } while (c);
+	do {
+		if (a >= b) {
+			a -= b;
+			result += c;
+		}
+		b = b >> 1;
+		c = c >> 1;
+	} while (c);
 
-  return result;
+	return result;
 }
 
 /*uint32_t div(uint32_t n, uint32_t d) {
-    // n is dividend, d is divisor
-    // store the result in q: q = n / d
-    uint32_t q = 0;
+	// n is dividend, d is divisor
+	// store the result in q: q = n / d
+	uint32_t q = 0;
 
-    // as long as the divisor fits into the remainder there is something to do
-    while (n >= d) {
-        uint32_t i = 0, d_t = d;
-        // determine to which power of two the divisor still fits the dividend
-        //
-        // i.e.: we intend to subtract the divisor multiplied by powers of two
-        // which in turn gives us a one in the binary representation 
-        // of the result
-        while (n >= (d_t << 1) && ++i)
-            d_t <<= 1;
-        // set the corresponding bit in the result
-        q |= 1 << i;
-        // subtract the multiple of the divisor to be left with the remainder
-        n -= d_t;
-        // repeat until the divisor does not fit into the remainder anymore
-    }
-    return q;
-}*/ 
+	// as long as the divisor fits into the remainder there is something to do
+	while (n >= d) {
+		uint32_t i = 0, d_t = d;
+		// determine to which power of two the divisor still fits the dividend
+		//
+		// i.e.: we intend to subtract the divisor multiplied by powers of two
+		// which in turn gives us a one in the binary representation
+		// of the result
+		while (n >= (d_t << 1) && ++i)
+			d_t <<= 1;
+		// set the corresponding bit in the result
+		q |= 1 << i;
+		// subtract the multiple of the divisor to be left with the remainder
+		n -= d_t;
+		// repeat until the divisor does not fit into the remainder anymore
+	}
+	return q;
+}*/
 
 /*uint32_t div(uint32_t a, uint32_t b) {
 	uint32_t ans = 0; // the quotient is intialized
