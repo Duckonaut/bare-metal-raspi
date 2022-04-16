@@ -24,7 +24,6 @@ void gpu_putc(char c, const pixel_t bg, const pixel_t fg)
 	uint8_t w, h;
 	uint8_t mask;
 	const uint8_t* bmp = font(c);
-	uint32_t i;
 
 	// shift everything up one row
 	if (char_display_info.y >= char_display_info.max_y) {

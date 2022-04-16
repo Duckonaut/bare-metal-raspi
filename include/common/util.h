@@ -15,6 +15,10 @@ char* btoa(uint32_t num);
 
 int atoi(char* num);
 
+uint32_t valid_hex_byte(char high, char low);
+
+uint8_t xtob(char* c);
+
 void memcpy(void* dest, const void* src, int bytes);
 
 void memset(void* dest, uint8_t c, int bytes);

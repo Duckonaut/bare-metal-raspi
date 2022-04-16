@@ -79,16 +79,29 @@ void kernel_main(uint32_t r0, uint32_t r1, uint32_t atags)
 	pixel_t black = {0, 0, 0};
 
 	uint32_t x = 0;
-	for (uint32_t i = 0;; i = rand()) {
-		char c = 'A' + mod(i, 26);
 
-		x++;
+    printf("Hello, world!\n");
 
-		gpu_puts(&c, black, (pixel_t){ (x >> 16) & 0xFF, (x >> 8) & 0xFF, x & 0xFF });
+    printf("Hello, %dst world!\n", 1);
 
-		gpu_setcursor(mod(rand(), char_display_info.max_x), mod(rand(), char_display_info.max_y));
-	}
+    printf("Hello, %dnd world!\n", 2);
 
+    printf("Hello, %xth world!\n", 1436);
+
+    printf("Hello, %s!\n", "world");
+
+    printf("%[_:_]HI\n");
+    printf("%[FF000000:_]HI\n");
+    printf("%[_:FFFFFF00]HI\n");
+    printf("%[00FF0000:0000FF00]HI\n");
+    printf("%[_:_]HI\n");
+    printf("%[FFFFFF00:00000000]HI\n");
+    printf("%[FFFFFF0000000000]HI\n");
+    printf("%[]HI\n");
+    printf("%[:::]HI\n");
+    printf("%[xyz]HI\n");
+    printf("%[XXXXXXXX:FFFFFFFF]HI\n");
+	
 	uint32_t gpio_enable_output = 0x00040000;
 	uint32_t gpio_comm_16 = 0x00010000;
 	uint32_t delay_num = 0x003F0000;

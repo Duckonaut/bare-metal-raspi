@@ -3,6 +3,6 @@
 
 #include <stdint.h>
 
-void printf(char* s);
+void printf(char* s, ...);
 
 #endif

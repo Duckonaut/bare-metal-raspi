@@ -26,42 +26,6 @@ uint32_t div(uint32_t a, uint32_t b)
 	return result;
 }
 
-/*uint32_t div(uint32_t n, uint32_t d) {
-	// n is dividend, d is divisor
-	// store the result in q: q = n / d
-	uint32_t q = 0;
-
-	// as long as the divisor fits into the remainder there is something to do
-	while (n >= d) {
-		uint32_t i = 0, d_t = d;
-		// determine to which power of two the divisor still fits the dividend
-		//
-		// i.e.: we intend to subtract the divisor multiplied by powers of two
-		// which in turn gives us a one in the binary representation
-		// of the result
-		while (n >= (d_t << 1) && ++i)
-			d_t <<= 1;
-		// set the corresponding bit in the result
-		q |= 1 << i;
-		// subtract the multiple of the divisor to be left with the remainder
-		n -= d_t;
-		// repeat until the divisor does not fit into the remainder anymore
-	}
-	return q;
-}*/
-
-/*uint32_t div(uint32_t a, uint32_t b) {
-	uint32_t ans = 0; // the quotient is intialized
-
-	for (uint32_t i = 31; i >= 0; i--) {
-		if (b << i <= a) { // checking if b multiplied by 2**i is <= a
-			a -= b << i;   // subtracting b << i from a
-			ans += 1 << i; // adding 2 power i to the answer
-		}
-	}
-	return ans;
-}*/
-
 uint32_t mod(uint32_t dividend, uint32_t divisor)
 {
 	uint32_t res;
@@ -69,6 +33,35 @@ uint32_t mod(uint32_t dividend, uint32_t divisor)
 	res = div(dividend, divisor);
 
 	return dividend - (res * divisor);
+}
+
+uint32_t valid_hex_byte(char high, char low) {
+    return ((high >= '0' && high <= '9') || (high >= 'a' && high <= 'f') || (high >= 'A' && high <= 'F')) && ((low >= '0' && low <= '9') || (low >= 'a' && low <= 'f') || (low >= 'A' && low <= 'F')); 
+}
+
+uint8_t xtob(char* c) {
+    char high = c[0];
+    char low = c[1];
+    uint8_t result = 0;
+    
+    if (!valid_hex_byte(high, low))
+        return 0;
+
+    if (high >= '0' && high <= '9')
+        result += (high - '0') << 4;
+    else if (high >= 'a' && high <= 'f')
+        result += (high - 'a' + 10) << 4;
+    else if (high >= 'A' && high <= 'F')
+        result += (high - 'A' + 10) << 4;
+
+    if (low >= '0' && low <= '9')
+        result += low - '0';
+    else if (low >= 'a' && low <= 'f')
+        result += low - 'a' + 10;
+    else if (low >= 'A' && low <= 'F')
+        result += low - 'A' + 10;
+
+    return result;
 }
 
 char* itoa(uint32_t num, uint32_t base)
@@ -126,8 +119,6 @@ char* btoa(uint32_t num)
 	intbuf[0] = '0';
 	intbuf[1] = 'b';
 	intbuf[34] = '\0';
-
-	uint32_t i = 33;
 
 	for (uint32_t i = 33; i > 1; i--) {
 		if (num & 1) {
